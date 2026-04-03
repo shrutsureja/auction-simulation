@@ -4,6 +4,8 @@ A quick overview, I referenced the [YouTube videos](#references) below to unders
 
 Here is a quick video demonstration of the simulation in action: [youtube link](https://youtu.be/MFfqoq2eR84)
 
+email : shrutsureja.work@gmail.com
+
 The concurrency model is designed to mimic the auction bidding process. I chose simplicity over complexity, the current approach is straightforward and built specifically for the scale mentioned in the task: 100 bidders and 40 concurrent auctions. It uses a semaphore pattern where a buffered channel gates how many auctions run simultaneously, keeping the code easy to follow without sacrificing correctness. Due to time constraints, I opted for this model which is sufficient for the scale mentioned in task.
 
 The current model runs at O(bidders × concurrent auctions) goroutines. At 100 bidders × 40 auctions that's 4,000 goroutines, well within Go's comfort zone. However, at larger scales like 10,000 bidders × 500 concurrent auctions, that's 5 million goroutines which would be problematic. For that scenario, the right move is shifting to a global bid processor pool:
