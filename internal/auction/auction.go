@@ -5,6 +5,7 @@ import (
 	"auction-simulation/internal/config"
 	"auction-simulation/internal/types"
 	"context"
+	"log/slog"
 	"time"
 )
 
@@ -50,12 +51,11 @@ func (a *Auction) StartAuction() types.AuctionResult {
 			}
 		case <-ctx.Done():
 			// context timeout, do not wait for more bids
-			println("Auction " + a.Id + ": timed out, no more bids will be accepted")
+			slog.Debug("auction closed", "auction_id", a.Id, "reason", "timeout", "bids_collected", len(bidsReceived))
 			if winningBid != nil {
-				// we have a winner
-				println("Auction "+a.Id+": Winner is:", winningBid.BidderId, "with amount:", winningBid.Amount)
+				slog.Debug("winner declared", "auction_id", a.Id, "bidder", winningBid.BidderId, "amount", winningBid.Amount)
 			} else {
-				println("Auction " + a.Id + ": No valid bids received")
+				slog.Warn("no valid bids", "auction_id", a.Id)
 			}
 
 			endTime := time.Now()

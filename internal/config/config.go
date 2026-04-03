@@ -3,21 +3,21 @@ package config
 import "time"
 
 type Config struct {
-	NumAuctions     int
-	NumBidders      int
-	AuctionDuration time.Duration
+	NumAuctions           int
+	MaxConcurrentAuctions int
+	NumBidders            int
+	AuctionDuration       time.Duration
+	MaxCPU                int   // GOMAXPROCS limit
+	MaxMemoryBytes        int64 // GOMEMLIMIT in bytes
 }
 
 func DefaultConfig() Config {
 	return Config{
-		NumAuctions:     40,
-		NumBidders:      100,
-		AuctionDuration: 500 * time.Millisecond,
+		NumAuctions:           80,
+		MaxConcurrentAuctions: 40,
+		NumBidders:            100,
+		AuctionDuration:       500 * time.Millisecond,
+		MaxCPU:                2,                 // standardize to 2 vCPUs
+		MaxMemoryBytes:        512 * 1024 * 1024, // standardize to 512MB RAM
 	}
-}
-
-func LoadConfig() Config {
-	// For keeping this simple, loading the default config.
-	// other wise we can load it from env, args or config files...
-	return DefaultConfig()
 }
