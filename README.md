@@ -1,6 +1,22 @@
 # Auction Simulation
 
-A concurrent real-time bidding (RTB) simulation in Go — modeled after how Prebid-style ad auctions work.
+A quick overview, I referenced the [YouTube videos](#references) below to understand how real-time ad auctions work before building this.
+
+Here is a quick video demonstration of the simulation in action: [youtube link](https://youtu.be/MFfqoq2eR84)
+
+The concurrency model is designed to mimic the auction bidding process. I chose simplicity over complexity, the current approach is straightforward and built specifically for the scale mentioned in the task: 100 bidders and 40 concurrent auctions. It uses a semaphore pattern where a buffered channel gates how many auctions run simultaneously, keeping the code easy to follow without sacrificing correctness. Due to time constraints, I opted for this model which is sufficient for the scale mentioned in task.
+
+The current model runs at O(bidders × concurrent auctions) goroutines. At 100 bidders × 40 auctions that's 4,000 goroutines, well within Go's comfort zone. However, at larger scales like 10,000 bidders × 500 concurrent auctions, that's 5 million goroutines which would be problematic. For that scenario, the right move is shifting to a global bid processor pool:
+
+```
+Current (simple, fits the task):
+  Auction → spawns N goroutines → collects bids
+
+At scale (future improvement):
+  Auction → submits jobs to shared pool → waits for responses
+  Pool of N workers → pulls jobs → routes responses back
+```
+
 
 ## How it runs
 
@@ -94,8 +110,8 @@ internal/
   config/config.go           # all parameters
   resource/resource.go       # runtime.MemStats snapshots
   types/types.go             # shared types
-  output/writer.go           # summary builder + file writer
-  output/dashboard.go        # embedded HTML timeline
+  report/writer.go           # summary builder + file writer
+  report/dashboard.go        # embedded HTML timeline
 ```
 
 ## References
