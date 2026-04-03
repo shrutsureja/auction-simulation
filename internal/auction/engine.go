@@ -1,15 +1,16 @@
 package auction
 
 import (
-	"auction-simulation/internal/bidder"
-	"auction-simulation/internal/config"
-	"auction-simulation/internal/resource"
-	"auction-simulation/internal/types"
 	"fmt"
 	"log/slog"
 	"math/rand/v2"
 	"sync"
 	"time"
+
+	"github.com/shrutsureja/auction-simulation/internal/bidder"
+	"github.com/shrutsureja/auction-simulation/internal/config"
+	"github.com/shrutsureja/auction-simulation/internal/resource"
+	"github.com/shrutsureja/auction-simulation/internal/types"
 )
 
 type Engine struct {

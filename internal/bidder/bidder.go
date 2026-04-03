@@ -1,10 +1,11 @@
 package bidder
 
 import (
-	"auction-simulation/internal/types"
 	"context"
 	"math/rand/v2"
 	"time"
+
+	"github.com/shrutsureja/auction-simulation/internal/types"
 )
 
 type Bidder struct {

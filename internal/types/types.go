@@ -1,8 +1,9 @@
 package types
 
 import (
-	"auction-simulation/internal/resource"
 	"time"
+
+	"github.com/shrutsureja/auction-simulation/internal/resource"
 )
 
 // request that auction sends to bidders

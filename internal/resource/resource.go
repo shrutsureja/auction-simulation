@@ -1,13 +1,14 @@
 package resource
 
 import (
-	"auction-simulation/internal/config"
 	"fmt"
 	"runtime"
+
+	"github.com/shrutsureja/auction-simulation/internal/config"
 )
 
 type Snapshot struct {
-	AllocMB      float64 `json:"alloc_mb"`      // currently allocated heap memory
+	AllocMB      float64 `json:"alloc_mb"`       // currently allocated heap memory
 	TotalAllocMB float64 `json:"total_alloc_mb"` // cumulative allocated (includes freed)
 	SysMB        float64 `json:"sys_mb"`         // total memory obtained from OS
 	NumGC        uint32  `json:"num_gc"`         // number of GC cycles

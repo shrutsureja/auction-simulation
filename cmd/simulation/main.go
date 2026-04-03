@@ -1,14 +1,15 @@
 package main
 
 import (
-	"auction-simulation/internal/auction"
-	"auction-simulation/internal/bidder"
-	"auction-simulation/internal/config"
-	"auction-simulation/internal/output"
 	"log/slog"
 	"os"
 	"runtime"
 	"runtime/debug"
+
+	"github.com/shrutsureja/auction-simulation/internal/auction"
+	"github.com/shrutsureja/auction-simulation/internal/bidder"
+	"github.com/shrutsureja/auction-simulation/internal/config"
+	"github.com/shrutsureja/auction-simulation/internal/report"
 )
 
 func main() {
@@ -36,7 +37,7 @@ func main() {
 	slog.Info("all auctions completed", "total_duration", duration.String(), "total_auctions", len(results))
 
 	// building summary and generating output files
-	output.GenerateAll("output", cfg, results, duration, resBefore, resAfter)
+	report.GenerateAll("output", cfg, results, duration, resBefore, resAfter)
 
 	for _, r := range results {
 		if r.BidWinner != nil {

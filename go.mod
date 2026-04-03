@@ -1,3 +1,3 @@
-module auction-simulation
+module github.com/shrutsureja/auction-simulation
 
 go 1.26.1

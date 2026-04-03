@@ -1,12 +1,13 @@
 package auction
 
 import (
-	"auction-simulation/internal/bidder"
-	"auction-simulation/internal/config"
-	"auction-simulation/internal/types"
 	"context"
 	"log/slog"
 	"time"
+
+	"github.com/shrutsureja/auction-simulation/internal/bidder"
+	"github.com/shrutsureja/auction-simulation/internal/config"
+	"github.com/shrutsureja/auction-simulation/internal/types"
 )
 
 type Auction struct {
