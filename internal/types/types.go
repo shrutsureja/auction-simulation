@@ -1,22 +1,25 @@
 package types
 
-import "time"
+import (
+	"auction-simulation/internal/resource"
+	"time"
+)
 
 // request that auction sends to bidders
 type BidRequest struct {
-	AuctionId  string
+	AuctionID  string
 	Attributes map[string]string
 }
 
 // response the bidder sends back
 type BidResponse struct {
-	BidderId string  `json:"bidder_id"`
+	BidderID string  `json:"bidder_id"`
 	Amount   float64 `json:"amount"`
 }
 
 // storing the result of an auction for reporting
 type AuctionResult struct {
-	AuctionId    string            `json:"auction_id"`
+	AuctionID    string            `json:"auction_id"`
 	Attributes   map[string]string `json:"attributes"`
 	TotalBidders int               `json:"total_bidders"`
 	BidsReceived []BidResponse     `json:"bids_received"`
@@ -27,32 +30,20 @@ type AuctionResult struct {
 	EndTime      time.Time         `json:"end_time"`
 }
 
-// snapshot of resource usage at a point in time for reporting
-type ResourceSnapshot struct {
-	AllocMB      float64 `json:"alloc_mb"`
-	TotalAllocMB float64 `json:"total_alloc_mb"`
-	SysMB        float64 `json:"sys_mb"`
-	NumGC        uint32  `json:"num_gc"`
-	NumGoroutine int     `json:"num_goroutines"`
-	NumCPU       int     `json:"num_cpu"`
-}
-
 // summary of the entire simulation run for reporting
 type SimulationSummary struct {
 	// Config
-	NumAuctions           int    `json:"num_auctions"`
-	MaxConcurrentAuctions int    `json:"max_concurrent_auctions"`
-	NumBidders            int    `json:"num_bidders"`
-	AuctionTimeoutMs      int64  `json:"auction_timeout_ms"`
-	MaxCPU                int    `json:"max_cpu"`
-	MaxMemoryMB           int64  `json:"max_memory_mb"`
-	TotalDurationMs       int64  `json:"total_duration_ms"`
-	TotalDuration         string `json:"total_duration"`
-
-	// Resource usage
-	ResourceBefore ResourceSnapshot `json:"resource_before"`
-	ResourceAfter  ResourceSnapshot `json:"resource_after"`
-	MemoryDeltaMB  float64          `json:"memory_delta_mb"`
+	NumAuctions           int               `json:"num_auctions"`
+	MaxConcurrentAuctions int               `json:"max_concurrent_auctions"`
+	NumBidders            int               `json:"num_bidders"`
+	AuctionTimeoutMs      int64             `json:"auction_timeout_ms"`
+	MaxCPU                int               `json:"max_cpu"`
+	MaxMemoryMB           int64             `json:"max_memory_mb"`
+	TotalDurationMs       int64             `json:"total_duration_ms"`
+	TotalDuration         string            `json:"total_duration"`
+	ResourceBefore        resource.Snapshot `json:"resource_before"`
+	ResourceAfter         resource.Snapshot `json:"resource_after"`
+	MemoryDeltaMB         float64           `json:"memory_delta_mb"`
 
 	// Auction stats
 	AuctionsWithWinner   int     `json:"auctions_with_winner"`
@@ -70,9 +61,9 @@ type SimulationSummary struct {
 
 // summary of each auction for reporting
 type AuctionSummary struct {
-	AuctionId    string  `json:"auction_id"`
+	AuctionID    string  `json:"auction_id"`
 	BidsReceived int     `json:"bids_received"`
-	WinnerId     string  `json:"winner_id,omitempty"`
+	WinnerID     string  `json:"winner_id,omitempty"`
 	WinnerAmount float64 `json:"winner_amount,omitempty"`
 	DurationMs   float64 `json:"duration_ms"`
 	StartMs      float64 `json:"start_ms"`

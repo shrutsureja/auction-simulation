@@ -22,11 +22,11 @@ func (e *Engine) RunAll() ([]types.AuctionResult, time.Duration, resource.Snapsh
 	start := time.Now()
 
 	// capturing the initial resource memory
-	before := resource.TakeSnapshot()
+	before := resource.TakeSnapshot(e.Config)
 	slog.Info("engine starting", "auctions", e.Config.NumAuctions, "bidders", e.Config.NumBidders, "resources", before.String())
 
-	resultsChan := make(chan types.AuctionResult, e.Config.NumAuctions)
 	var wg sync.WaitGroup
+	resultsChan := make(chan types.AuctionResult, e.Config.NumAuctions)
 	sem := make(chan struct{}, e.Config.MaxConcurrentAuctions) // semaphore to limit concurrent auctions
 
 	for i := 0; i < e.Config.NumAuctions; i++ {
@@ -40,9 +40,9 @@ func (e *Engine) RunAll() ([]types.AuctionResult, time.Duration, resource.Snapsh
 
 			id := fmt.Sprintf("auction_%d", index+1)
 			auction := Auction{
-				Id:         id,
-				Request:    types.BidRequest{AuctionId: id, Attributes: generateAttributes()},
-				Config:     *e.Config,
+				ID:         id,
+				Request:    types.BidRequest{AuctionID: id, Attributes: generateAttributes()},
+				Config:     e.Config,
 				BidderPool: e.BidderPool,
 			}
 			resultsChan <- auction.StartAuction()
@@ -51,7 +51,7 @@ func (e *Engine) RunAll() ([]types.AuctionResult, time.Duration, resource.Snapsh
 
 	// capture peak resource usage while all auctions are running
 	// time.Sleep(50 * time.Millisecond) // brief pause to let goroutines spin up
-	// peak := resource.TakeSnapshot()
+	// peak := resource.TakeSnapshot(e.Config)
 	// slog.Info("peak resources (mid-run)", "resources", peak.String())
 
 	// close channel once all auctions finish
@@ -67,7 +67,7 @@ func (e *Engine) RunAll() ([]types.AuctionResult, time.Duration, resource.Snapsh
 
 	end := time.Now()
 
-	after := resource.TakeSnapshot()
+	after := resource.TakeSnapshot(e.Config)
 	slog.Info("engine finished",
 		"total_duration", end.Sub(start).String(),
 		"resources", after.String(),

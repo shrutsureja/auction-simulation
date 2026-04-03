@@ -13,7 +13,7 @@ type Config struct {
 
 func DefaultConfig() Config {
 	return Config{
-		NumAuctions:           80,
+		NumAuctions:           40,
 		MaxConcurrentAuctions: 40,
 		NumBidders:            100,
 		AuctionDuration:       500 * time.Millisecond,
